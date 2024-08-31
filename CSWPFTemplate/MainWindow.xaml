@@ -1,0 +1,79 @@
+﻿<window:PositionedWindow x:Class="CSWPFTemplate.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CSWPFTemplate"
+        xmlns:window="clr-namespace:CSWPFTemplate.Common.Windows"
+        xmlns:localControls="clr-namespace:CSWPFTemplate.Common.Controls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding MenuCommandNew}"/>
+                <MenuItem Header="_Open..."/>
+                <MenuItem Header="_Save As..."/>
+                <Separator />
+                <MenuItem Header="_Quit" InputGestureText="Alt+F4" Command="{Binding MenuCommandQuit}" />
+            </MenuItem>
+            <MenuItem Header="_Data">
+                <MenuItem Header="_Update from File..."/>
+                <Separator />
+                <MenuItem Header="_Import"/>
+                <MenuItem Header="_Export"/>
+            </MenuItem>
+        </Menu>
+        <localControls:WindowFooter DockPanel.Dock="Bottom" ShowBusy="{Binding IsBusy}" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ListView Grid.Row="0" Grid.Column="0"
+                      ItemsSource="{Binding Categories}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <Image Source="{Binding ImageData}" 
+                                   VerticalAlignment="Center" 
+                                   Width="50" 
+                                   Margin="5,0"/>
+                            <TextBlock Text="{Binding CategoryName}" 
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <GridSplitter Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+            <ListView Grid.Row="0" Grid.Column="3"
+                      ItemsSource="{Binding DetailRows}" 
+                      d:ItemsSource="{d:SampleData ItemCount=5}"
+                      GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
+                <ListView.View>
+
+                    <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Information">
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Category}" Header="Category" Width="100"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Text}" Width="100">
+                            <GridViewColumnHeader>Name
+                                <GridViewColumnHeader.ContextMenu>
+                                    <ContextMenu > <!--MenuItem.Click="NameCM_Click" to manually implement sorting--> 
+                                        <MenuItem Header="Ascending" />
+                                        <MenuItem Header="Descending" />
+                                    </ContextMenu>
+                                </GridViewColumnHeader.ContextMenu>
+                            </GridViewColumnHeader>
+                        </GridViewColumn>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Note}" Header="Note" Width="250"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>        
+    </DockPanel>
+</window:PositionedWindow>
