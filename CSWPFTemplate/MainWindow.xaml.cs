@@ -99,5 +99,28 @@ namespace CSWPFTemplate
             parent?.RaiseEvent(eventArg);
         }
         #endregion
+
+        #region DPI change handling
+        //Sample for handling dpi changes.
+        //This only needs to be used for special cases where the internal re-rendering doesn't work,
+        //for example reloading higher-dpi bitmaps
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            //new Thread(ScaleWindow).Start();
+        }
+
+        public void ScaleWindow()
+        {
+            //this.Dispatcher.Invoke(() =>
+            //{
+            //    DpiScale Dpi = VisualTreeHelper.GetDpi(this);
+            //    var CurrentDpi_X = "Current DPI_X:  " + Dpi.DpiScaleX + "  The various elements of the Window should scale_x:  " + 1 / Dpi.DpiScaleX;
+            //    var CurrentDpi_Y = "Current DPI_Y:  " + Dpi.DpiScaleY + "  The various elements of the Window should scale_y:  " + 1 / Dpi.DpiScaleY;
+            //    //Width = 500 / Dpi.DpiScaleX;
+            //    //Height = 400 / Dpi.DpiScaleY;
+            //});
+        }
+        #endregion
+
     }
 }

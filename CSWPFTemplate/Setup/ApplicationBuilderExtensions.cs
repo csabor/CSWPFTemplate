@@ -7,6 +7,7 @@ using CSWPFTemplate.ViewModels;
 using Serilog;
 using Serilog.Exceptions;
 using System.IO;
+using CSWPFTemplate.Views;
 
 namespace CSWPFTemplate.Setup
 {
@@ -58,6 +59,7 @@ namespace CSWPFTemplate.Setup
             hostBuilder.Services.AddSingleton<IMessenger>(StrongReferenceMessenger.Default);
             //hostBuilder.Services.AddTransient<ILoggingService, LoggingService>();
             hostBuilder.Services.AddSingleton(Log.Logger);
+            hostBuilder.Services.AddTransient<IBaseSettings, BaseSettingsService>();
             hostBuilder.Services.AddTransient<ISettingsService, SettingsService>();
             hostBuilder.Services.AddSingleton<IWindowPositionPersistanceService, WindowPositionService>();
 
@@ -74,6 +76,7 @@ namespace CSWPFTemplate.Setup
         public static HostApplicationBuilder RegisterViewModels(this HostApplicationBuilder hostBuilder)
         {
             hostBuilder.Services.AddSingleton<MainWindowViewModel>();
+            hostBuilder.Services.AddTransient<CategoryEditViewModel>();
 
             // More view-models registered here.
 
@@ -88,6 +91,7 @@ namespace CSWPFTemplate.Setup
         public static HostApplicationBuilder RegisterViews(this HostApplicationBuilder hostBuilder)
         {
             hostBuilder.Services.AddSingleton<MainWindow>();
+            hostBuilder.Services.AddTransient<CategoryEditView>();
 
             // More views registered here.
 

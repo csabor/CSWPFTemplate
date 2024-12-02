@@ -4,21 +4,33 @@ using CommunityToolkit.Mvvm.Messaging;
 using CSWPFTemplate.Common.Messaging.Messages;
 using CSWPFTemplate.Models;
 using CSWPFTemplate.Settings;
+using CSWPFTemplate.Views;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace CSWPFTemplate.ViewModels
 {
     //this class receives messages, so it should inherit ObservableRecipient and handle registration and unregistration.
     //Otherwise inheriting just ObservableObject would be ok
+    //This is partial because the [ObservableProperty] attribute generates source for the properties
     public sealed partial class MainWindowViewModel : ObservableRecipient 
     {
         #region Constructor
-        public MainWindowViewModel(ISettingsService settings, IMessenger messenger) : base(messenger)
+        public MainWindowViewModel(IServiceProvider serviceProvider, ISettingsService settings, IMessenger messenger, ILogger<MainWindowViewModel> logger) : base(messenger)
         {
             IsActive = true; //set the view model to active to allow receiving messages
 
             InitData(settings);
+            ServiceProvider = serviceProvider;
+            Logger = logger;
         }
+        #endregion
+
+        #region Service Properties
+        public IServiceProvider ServiceProvider { get; }
+        public ILogger<MainWindowViewModel> Logger { get; }
         #endregion
 
         #region IsBusy
@@ -50,7 +62,7 @@ namespace CSWPFTemplate.ViewModels
         #endregion
 
         #region Menu Commands
-        public static RelayCommand MenuCommandQuit { get => new(System.Windows.Application.Current.Shutdown); }
+        public RelayCommand MenuCommandQuit { get => new(Application.Current.Shutdown); }
         public RelayCommand MenuCommandNew { get => new(() => IsBusy = !IsBusy); }
         #endregion
 
@@ -84,6 +96,29 @@ namespace CSWPFTemplate.ViewModels
                     Text = "MyTest",
                     Note = rnd.NextInt64().ToString()
                 });
+            }
+        }
+
+        [RelayCommand]
+        private void CategoryAction()
+        {
+            OnCategoryCreate();
+        }
+
+        private void OnCategoryCreate()
+        {
+            try
+            {
+                CategoryEditView editForm = ServiceProvider.GetRequiredService<CategoryEditView>();
+                CategoryEditViewModel viewModel = ServiceProvider.GetRequiredService<CategoryEditViewModel>();
+                viewModel.InitData();
+                editForm.DataContext = viewModel;
+                editForm.Show();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error while opening category window");
+                MessageBox.Show("Error while opening category window", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion

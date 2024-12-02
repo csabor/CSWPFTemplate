@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using CSWPFTemplate.Setup;
 using Serilog;
 using System.Windows;
+using CSWPFTemplate.Common.Extensions.ApplicationSetup;
 
 namespace CSWPFTemplate
 {
@@ -38,6 +39,7 @@ namespace CSWPFTemplate
         public ApplicationSetup()
         {
             var builder = Host.CreateApplicationBuilder()
+                .RegisterDPIAwareness()
                 .ConfigureSerilog()
                 .RegisterServices()
                 .RegisterViewModels()

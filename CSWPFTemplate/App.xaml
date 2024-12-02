@@ -2,8 +2,29 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CSWPFTemplate"
+             ShutdownMode="OnMainWindowClose"
              >
+    <!-- ShutdownMode needs to be set explicitely (even just to the default OnLastWindowClose), because only if some parameter is set for the Application, 
+        the app gets initialized correctly and static resources defined here are available -->    
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <FontFamily x:Key="FontAwesome">/CSWPFTemplate;component/Resources/Fonts/Font Awesome 6 Free-Regular-400.otf#Font Awesome 6 Free Regular</FontFamily>
+
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Padding" Value="10,2" />
+            </Style>
+            <Style x:Key="ConfirmButton" 
+                   TargetType="Button" 
+                   BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Width" Value="100" />
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

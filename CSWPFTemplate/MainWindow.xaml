@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSWPFTemplate"
         xmlns:window="clr-namespace:CSWPFTemplate.Common.Windows"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:localControls="clr-namespace:CSWPFTemplate.Common.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -36,6 +37,11 @@
             </Grid.ColumnDefinitions>
             <ListView Grid.Row="0" Grid.Column="0"
                       ItemsSource="{Binding Categories}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding CategoryActionCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>                
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
@@ -43,6 +49,8 @@
                                    VerticalAlignment="Center" 
                                    Width="50" 
                                    Margin="5,0"/>
+                            <TextBlock x:Name="tbFontAwesome" Text="&#xf007;" FontFamily="{StaticResource FontAwesome}" Foreground="Red" FontSize="32" Margin="10" VerticalAlignment="Center"></TextBlock>
+
                             <TextBlock Text="{Binding CategoryName}" 
                                        VerticalAlignment="Center" />
                         </StackPanel>
